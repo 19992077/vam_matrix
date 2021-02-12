@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            overflow: hidden;
+            flex-direction: column;
+        }
+        .item {
+            width: 50%;
+        }
+        .item span {
+            position: absolute;
+        }
+        .item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .separator {
+            width: 100%;
+            height: 50vh;
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="separator">
+            <div class="item">
+                <span>RELOAD</span>
+                <video><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"></video>
+            </div>
+            <div class="item">
+                <video><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"></video>
+            </div>
+        </div>
+        <div class="separator">
+            <div class="item">
+                <video><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"></video>
+            </div>
+            <div class="item">
+                <video><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"></video>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
