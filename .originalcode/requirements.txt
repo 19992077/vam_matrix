@@ -1,0 +1,6 @@
+requests
+youtube_dl
+cx_freeze
+bs4
+flask
+waitress

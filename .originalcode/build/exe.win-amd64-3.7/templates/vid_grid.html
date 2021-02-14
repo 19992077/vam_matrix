@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Porn Matrix</title>
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/solid.css" integrity="sha384-+0VIRx+yz1WBcCTXBkVQYIBVNEFH1eP6Zknm16roZCyeNg2maWEpk/l/KsyFKs7G" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/fontawesome.css" integrity="sha384-jLuaxTTBR42U2qJ/pm4JRouHkEDHkVqH0T1nyQXn1mZ7Snycpf6Rl25VBNthU4z0" crossorigin="anonymous">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,  minimum-scale=1.0">
+<style>
+*  {padding: 0; margin:0; border:0;}
+body {background-color: #000000; }
+.viddy {
+    max-height: 100%;
+    max-width: 100%;}
+#griddy {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: repeat({{ cols }}, auto);
+    grid-template-rows: repeat({{ rows }}, auto);
+    place-items: center stretch;}
+#help {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index:98;
+    background-color: lightgrey;
+    border-radius: 10px;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);}
+#controls {
+    position: fixed;
+    top: 5px !important;
+    left: 5px !important;
+    z-index: 97;
+    display: table;}
+button {
+    font-size: 2.5vmin;
+    font-weight: bold;
+    min-width: 3vmin;
+    display: table-cell;
+    background-color: Transparent;
+    color: white;
+    text-shadow: -1px 1px black;
+    pointer-events: auto !important;}
+#button_griddy {
+    position: absolute;
+    top: 0px;
+    left: -10px;
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: repeat({{ cols }}, auto);
+    grid-template-rows: repeat({{ rows }}, auto);
+    place-items: start end;
+    pointer-events: none;}
+#main_buttons {
+    position: absolute;
+    top: 0px;
+    left: 0px;}
+.fa-redo-alt {
+    font-size: 2vmin;
+    min-width: 2.5vmin;}
+#search_box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 99;
+    font-size: 6vmin;
+    border: 2px solid black;
+    padding: .5vmin;
+    padding-left: 1vmin;
+    border-radius: 10px;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+    display: none;}
+#volume {
+    -webkit-appearance: none;
+    width: 15vmin;
+    height: .5vmin;
+    border-radius: .5vmin;   
+    background: #white;
+    outline: none;
+    position: fixed;
+    top: 1.6vmin;
+    left: 4vmin;
+    z-index: 97;
+    box-shadow: -1px 1px black;}
+#volume::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 2vmin;
+    height: 2vmin;
+    border-radius: 50%; 
+    background: white;
+    cursor: pointer;
+    box-shadow: -1px 1px black;}
+#volume::-moz-range-thumb {
+    width: 2vmin;
+    height: 2vmin;
+    border-radius: 50%;
+    background: #white;
+    cursor: pointer;
+    box-shadow: -1px 1px black;}
+</style>
+</head>
+<body>
+    <div id="help">
+        <pre>
+
+    <a href="https://paypal.me/deracoslon">donate if you enjoy my work</a> :)
+
+  Hotkeys:
+    m = toggle mute
+    +/- = adjust volume 5%
+    h = toggle help
+    c = toggle controls
+    enter = toggle search
+      new vids will use it
+    F11 = fullscreen
+    left arrow = go back 30s
+    right arrow = go forward 30s
+    down arrow = move to beginning
+    up arrow = move to end
+    p or pause = toggle pause/play
+    r = reload all
+    1-9 = load new in square #
+
+  Tips:
+   - Multiple monitor support,
+     control windows simultaneously  
+   - Phone support
+        </pre>
+    </div>
+    <input type="text" id="search_box" size="20" placeholder="search term">
+    <div id="controls">
+        <input type="range" min="0" max="1" value="1" step=".01" class="slider" id="volume">
+        <div id="button_griddy">
+        {% for i in range(cols * rows) %}
+            <button id="{{ i + 1 }}"><i class="fas fa-redo-alt"></i></button>
+        {% endfor %} 
+        </div>
+        <div id="main_buttons">
+            <button id="toggle_mute"><i class="fas fa-volume-mute"></i></button>
+            <button id="toggle_pause"><i class="fas fa-pause"></i></button>
+            <button id="beginning"><i class="fas fa-step-backward"></i></button>
+            <button id="fast_reverse"><i class="fas fa-backward"></i></button>
+            <button id="fast_forward"><i class="fas fa-forward"></i></button>
+            <button id="end"><i class="fas fa-step-forward"></i></button>
+            <button id="reload"><i class="fas fa-sync-alt"></i></button>
+            <button id="toggle_search"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+    <div id="griddy">
+        {% for i in range(cols * rows) %}
+        <video class="viddy" controls muted autoplay loop></video>
+        {% endfor %}
+    </div>
+<script>
+    rows = {{ rows }};
+    cols = {{ cols }};
+    pages = {{ pages }};
+    length = {{ length }};
+    hd = {{ hd }};
+    search = "{{ search }}";
+</script>
+<script src="/static/control.js"></script>
+</body>
+</html>
