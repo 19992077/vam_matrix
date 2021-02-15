@@ -36,6 +36,7 @@ const ItemSeparator = styled.div`
 `
 
 const Item = styled.div`
+  display: flex;
   width: 50%;
 
   & video {
@@ -45,32 +46,112 @@ const Item = styled.div`
   }
 `
 
-const VideoItem = (src, isEmbed) => {
+const VideoItem = () => {
   const componentRef = useRef()
   const { width, height } = useContainerDimensions(componentRef)
 
-  if (isEmbed) {
-    return (
-      <Item ref={componentRef}>
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [videos, setVideos] = useState([])
+
+  const onChangeHandler = event => {
+    setSearchTerm(event.target.value)
+    fetch("http://localhost:5000/search/youtube?search_term=" + searchTerm)
+    .then(res => {
+      res.json()
+      .then(data => {
+        console.log(data.videos)
+        setVideos(data.videos)
+      })
+    })
+  }
+
+  const getVideoLink = (videoData) => {
+    if (!videoData) return
+    const youtubeEmbedUrl = "https://youtube.com/embed/" + videoData.id
+    return youtubeEmbedUrl
+  }
+
+  const toggleMenu = () => {
+    if (isMenuOpen) {
+      setIsMenuOpen(false)
+    } else {
+      setIsMenuOpen(true)
+    }
+  }
+
+  const menuStyle = {
+    display: isMenuOpen ? "block" : "none"
+  }
+
+  return (
+    <Item ref={componentRef}>
+      <div style={{position: "absolute"}}>
+        <button onClick={toggleMenu}>{isMenuOpen ? "X" : "+"}</button>
+
+        <div style={menuStyle}>
+          <input type="text" onChange={onChangeHandler} value={searchTerm} />
+        </div>
+      </div>
+
+      {!videos ? "Loading..." : (
         <iframe 
           width={width}
           height={height}
-          src={src.src}
-          frameborder="0"
+          src={getVideoLink(videos[0])}
+          frameBorder="0"
           allow="autoplay; encrypted-media"
-          allowfullscreen
+          allowFullScreen
         />
-      </Item>
-    )
-  } else {
-    return (
-      <Item>
-        <video controls>
-          <source src={src.src} type="video/mp4"></source>
-        </video>
-      </Item>
-    )
+      )}
+    </Item>
+  )
+
+  // if (src && isEmbed) {
+  //   return (
+  //     <Item ref={componentRef}>
+  //       <iframe 
+  //         width={width}
+  //         height={height}
+  //         src={src.src}
+  //         frameBorder="0"
+  //         allow="autoplay; encrypted-media"
+  //         allowFullScreen
+  //       />
+  //     </Item>
+  //   )
+  // }
+}
+
+const Search = (searchTerm) => {
+  // const onChangeHandler = event => {
+  //   setSearchTerm(event.target.value)
+  //   fetch("http://localhost:5000/search/youtube?search_term=" + searchTerm + "?max_results=20", {
+  //     method: "GET"
+  //   })
+  //   .then(res => {
+  //     res.json()
+  //       .then(data => {
+  //         console.log(data.videos)
+  //         setVideos(data.videos)
+  //       })
+  //   })
+  // }
+
+  const getSearchData = (searchTerm) => {
+    fetch("http://localhost:5000/search/youtube?search_term=" + searchTerm + "?max_results=20")
+      .then(res => res.json())
+      .then(data => {
+        console.log(data.videos)
+      })
   }
+
+  return (
+    <div>
+      <input type="text" value={searchTerm.searchTerm} placeholder="searchTerm" />
+      <button onClick={getSearchData}>OK</button>
+    </div>  
+  )
 }
 
 const AppContainer = styled.div`
@@ -88,12 +169,7 @@ const App = () => {
   return (
     <AppContainer>
       <ItemSeparator>
-        <VideoItem isEmbed={true} src="https://youtube.com/embed/KG3Y2B6BCwM" />
-        <VideoItem isEmbed={true} src="https://youtube.com/embed/KG3Y2B6BCwM" />
-      </ItemSeparator>
-      <ItemSeparator>
-        <VideoItem isEmbed={true} src="https://youtube.com/embed/KG3Y2B6BCwM" />
-        <VideoItem isEmbed={true} src="https://youtube.com/embed/KG3Y2B6BCwM" />
+        <VideoItem />
       </ItemSeparator>
     </AppContainer>
   )
