@@ -13,7 +13,6 @@ const Item = styled.div`
     }
 `
 
-// TODOS: get next video
 const VideoItem = () => {
     const componentRef = useRef()
     const { width, height } = useContainerDimensions(componentRef)
@@ -24,7 +23,7 @@ const VideoItem = () => {
     const [videoChange, setVideoChange] = useState(false)
 
     // TODO: make fake dropdown with css and state tricks
-    const [platform, setPlatform] = useState("")
+    const [platform, setPlatform] = useState("youtube")
     
     const onChangeHandler = event => {
         setSearchTerm(event.target.value)
@@ -84,9 +83,6 @@ const VideoItem = () => {
         
                 <div style={menuStyle}>
                     <input type="text" onChange={onChangeHandler} value={searchTerm} />
-                    <select>
-                        <option value={platform}>YouTube</option>
-                    </select>
                     {videos[0] ? (
                         <div>
                             <button onClick={showNextVideo}>NEXT</button>
