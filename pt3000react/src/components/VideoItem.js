@@ -21,18 +21,32 @@ const VideoItem = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [searchTerm, setSearchTerm] = useState("")
     const [videos, setVideos] = useState([])
+    const [videoChange, setVideoChange] = useState(false)
+
+    // TODO: make fake dropdown with css and state tricks
+    const [platform, setPlatform] = useState("")
     
     const onChangeHandler = event => {
         setSearchTerm(event.target.value)
-        fetch("http://localhost:5000/search/youtube?search_term=" + searchTerm)
-        .then(res => {
-            res.json()
-            .then(data => {
-                console.log(data.videos)
-                setVideos(data.videos)
+        if (platform == "youtube") {
+            fetch("http://localhost:5000/search/youtube?search_term=" + searchTerm)
+            .then(res => {
+                res.json()
+                .then(data => {
+                    console.log(data.videos)
+                    setVideos(data.videos)
+                })
             })
-        })
+        }
     }
+
+    useEffect(() => {
+        if (videoChange) {
+            if (videos[0]) {
+                setVideoChange(false)
+            }
+        }
+    })
     
     const getVideoLink = (videoData) => {
         if (!videoData) return
@@ -42,6 +56,13 @@ const VideoItem = () => {
     
     const showNextVideo = () => {
         console.log(videos)
+        setVideoChange(true)
+        videos.splice(0, 1)
+    }
+
+    const saveVideo = (videoData) => {
+        if (!videoData) return
+        console.log(videoData)
     }
     
     const toggleMenu = () => {
@@ -63,17 +84,27 @@ const VideoItem = () => {
         
                 <div style={menuStyle}>
                     <input type="text" onChange={onChangeHandler} value={searchTerm} />
-                    <div><button onClick={showNextVideo}>NEXT</button></div>
+                    <select>
+                        <option value={platform}>YouTube</option>
+                    </select>
+                    {videos[0] ? (
+                        <div>
+                            <button onClick={showNextVideo}>NEXT</button>
+                            {/* <button onClick={saveVideo(videos[0])}>SAVE</button> */}
+                        </div>
+                    ) : null}
                 </div>
             </div>
         
-        {!videos ? "Loading..." : (
-            <iframe 
+        {videoChange ? (
+            <div>Loading...</div>
+        ) : (
+            <iframe
                 width={width}
                 height={height}
                 src={getVideoLink(videos[0])}
                 frameBorder="0"
-                allow="autoplay; encrypted-media"
+                allow="autoplay"
                 allowFullScreen
             />
         )}

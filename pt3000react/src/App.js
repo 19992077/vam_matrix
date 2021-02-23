@@ -23,6 +23,11 @@ const App = () => {
     <AppContainer>
       <ItemSeparator>
         <VideoItem />
+        <VideoItem />
+      </ItemSeparator>
+      <ItemSeparator>
+        <VideoItem />
+        <VideoItem />
       </ItemSeparator>
     </AppContainer>
   )
