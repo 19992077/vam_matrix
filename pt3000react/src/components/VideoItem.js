@@ -69,11 +69,11 @@ const VideoItem = () => {
     }
 
     const loadSpankbang = () => {
-        fetch("http://localhost:5000/search/spankbang?search_term=" + searchTerm)
+        fetch("http://localhost:5000/search/spankbang?search_term=" + searchTerm + "&page=1")
             .then(res => {
                 res.json()
                 .then(data => {
-                    setVideos(data.videos)
+                    setVideos(data)
                 })
             })
     }
@@ -89,6 +89,12 @@ const VideoItem = () => {
         if (platform == "pornhub") {
             const pornhubEmbedUrl = "https://jp.pornhub.com/embed/" + videoData.video_id
             return pornhubEmbedUrl
+        }
+
+        if (platform == "spankbang") {
+            const regex = /.+?(?=video)/
+            const spankbangEmbedUrl = regex.exec(videoData)
+            return spankbangEmbedUrl[0] + "embed"
         }
     }
     
