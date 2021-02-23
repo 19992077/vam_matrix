@@ -22,23 +22,8 @@ const VideoItem = () => {
     const [videos, setVideos] = useState([])
     const [videoChange, setVideoChange] = useState(false)
 
-    // TODO: make fake dropdown with css and state tricks
     const [platform, setPlatform] = useState("youtube")
     
-    const onChangeHandler = event => {
-        setSearchTerm(event.target.value)
-        if (platform == "youtube") {
-            fetch("http://localhost:5000/search/youtube?search_term=" + searchTerm)
-            .then(res => {
-                res.json()
-                .then(data => {
-                    console.log(data.videos)
-                    setVideos(data.videos)
-                })
-            })
-        }
-    }
-
     useEffect(() => {
         if (videoChange) {
             if (videos[0]) {
@@ -46,11 +31,65 @@ const VideoItem = () => {
             }
         }
     })
+
+    const onChangeHandler = event => {
+        setSearchTerm(event.target.value)
+        
+        if (platform == "youtube") {
+            loadYoutube()
+        }
+
+        if (platform == "pornhub") {
+            loadPornhub()
+        }
+
+        if (platform == "spankbang") {
+            loadSpankbang()
+        }
+    }
+
+    const loadYoutube = () => {
+        fetch("http://localhost:5000/search/youtube?search_term=" + searchTerm)
+            .then(res => {
+                res.json()
+                .then(data => {
+                    setVideos(data.videos)
+                })
+            })
+    }
+
+    const loadPornhub = () => {
+        fetch("http://localhost:5000/search/pornhub?search_term=" + searchTerm)
+            .then(res => {
+                res.json()
+                .then(data => {
+                    setVideos(data.videos)
+                })
+            })
+    }
+
+    const loadSpankbang = () => {
+        fetch("http://localhost:5000/search/spankbang?search_term=" + searchTerm)
+            .then(res => {
+                res.json()
+                .then(data => {
+                    setVideos(data.videos)
+                })
+            })
+    }
     
     const getVideoLink = (videoData) => {
         if (!videoData) return
-        const youtubeEmbedUrl = "https://youtube.com/embed/" + videoData.id
-        return youtubeEmbedUrl
+
+        if (platform == "youtube") {
+            const youtubeEmbedUrl = "https://youtube.com/embed/" + videoData.id
+            return youtubeEmbedUrl
+        }
+
+        if (platform == "pornhub") {
+            const pornhubEmbedUrl = "https://jp.pornhub.com/embed/" + videoData.video_id
+            return pornhubEmbedUrl
+        }
     }
     
     const showNextVideo = () => {
@@ -82,7 +121,19 @@ const VideoItem = () => {
                 <button onClick={toggleMenu}>{isMenuOpen ? "X" : "+"}</button>
         
                 <div style={menuStyle}>
-                    <input type="text" onChange={onChangeHandler} value={searchTerm} />
+                    <input 
+                        type="text" 
+                        onChange={onChangeHandler} 
+                        value={searchTerm} 
+                    />
+                    <select
+                        onChange={e => setPlatform(e.target.value)}
+                        value={platform}
+                    >
+                        <option value="youtube">YouTube</option>
+                        <option value="pornhub">Pornhub</option>
+                        <option value="spankbang">Spankbang</option>
+                    </select>
                     {videos[0] ? (
                         <div>
                             <button onClick={showNextVideo}>NEXT</button>
