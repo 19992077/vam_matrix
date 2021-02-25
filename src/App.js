@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import Navbar from "./components/Navbar"
+import VideoItem from "./components/VideoItem"
 
 const AppContainer = styled.div`
   display: flex;
@@ -12,16 +12,23 @@ const AppContainer = styled.div`
   flex-direction: column;
 `
 
-// const ItemSeparator = styled.div`
-//     display: flex;
-//     width: 100%;
-//     height: 50vh;
-// `
+const ItemSeparator = styled.div`
+    display: flex;
+    width: 100%;
+    height: 50vh;
+`
 
 const App = () => {
   return (
     <AppContainer>
-      <Navbar />
+      <ItemSeparator>
+        <VideoItem />
+        <VideoItem />
+      </ItemSeparator>
+      <ItemSeparator>
+        <VideoItem />
+        <VideoItem />
+      </ItemSeparator>     
     </AppContainer>
   )
 }
