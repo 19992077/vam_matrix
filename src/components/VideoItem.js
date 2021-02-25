@@ -24,31 +24,31 @@ const VideoItem = () => {
 
     const [platform, setPlatform] = useState("youtube")
     
-    useEffect(() => {
+    useEffect((videoChange, videos) => {
         if (videoChange) {
             if (videos[0]) {
                 setVideoChange(false)
             }
         }
-    })
+    }, [])
 
     const onChangeHandler = event => {
         setSearchTerm(event.target.value)
         
-        if (platform == "youtube") {
+        if (platform === "youtube") {
             loadYoutube()
         }
 
-        if (platform == "pornhub") {
+        if (platform === "pornhub") {
             loadPornhub()
         }
 
-        if (platform == "spankbang") {
+        if (platform === "spankbang") {
             loadSpankbang()
         }
     }
 
-    const loadYoutube = () => {
+    const loadYoutube = () => { 
         fetch("http://localhost:5000/search/youtube?search_term=" + searchTerm)
             .then(res => {
                 res.json()
@@ -81,17 +81,17 @@ const VideoItem = () => {
     const getVideoLink = (videoData) => {
         if (!videoData) return
 
-        if (platform == "youtube") {
+        if (platform === "youtube") {
             const youtubeEmbedUrl = "https://youtube.com/embed/" + videoData.id
             return youtubeEmbedUrl
         }
 
-        if (platform == "pornhub") {
+        if (platform === "pornhub") {
             const pornhubEmbedUrl = "https://jp.pornhub.com/embed/" + videoData.video_id
             return pornhubEmbedUrl
         }
 
-        if (platform == "spankbang") {
+        if (platform === "spankbang") {
             const regex = /.+?(?=video)/
             const spankbangEmbedUrl = regex.exec(videoData)
             return spankbangEmbedUrl[0] + "embed"
@@ -104,10 +104,10 @@ const VideoItem = () => {
         videos.splice(0, 1)
     }
 
-    const saveVideo = (videoData) => {
-        if (!videoData) return
-        console.log(videoData)
-    }
+    // const saveVideo = (videoData) => {
+    //     if (!videoData) return
+    //     console.log(videoData)
+    // }
     
     const toggleMenu = () => {
         if (isMenuOpen) {
@@ -153,6 +153,7 @@ const VideoItem = () => {
             <div>Loading...</div>
         ) : (
             <iframe
+                title={videos[0]}
                 width={width}
                 height={height}
                 src={getVideoLink(videos[0])}

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react"
 
 const useContainerDimensions = myRef => {
     const getDimensions = () => ({
-      width: myRef.current.offsetWidth,
-      height: myRef.current.offsetHeight
+        width: myRef.current.offsetWidth,
+        height: myRef.current.offsetHeight
     })
   
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
@@ -12,6 +12,7 @@ const useContainerDimensions = myRef => {
         const handleResize = () => {
             setDimensions(getDimensions())
         }
+        
         if (myRef.current) setDimensions(getDimensions())
 
         window.addEventListener("resize", handleResize)
