@@ -22,7 +22,7 @@ const VideoItem = () => {
     const [videos, setVideos] = useState([])
     const [videoChange, setVideoChange] = useState(false)
 
-    const [platform, setPlatform] = useState("youtube")
+    const [platform, setPlatform] = useState("")
     
     useEffect((videoChange, videos) => {
         if (videoChange) {
@@ -99,7 +99,6 @@ const VideoItem = () => {
     }
     
     const showNextVideo = () => {
-        console.log(videos)
         setVideoChange(true)
         videos.splice(0, 1)
     }
