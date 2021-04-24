@@ -53,6 +53,7 @@ const VideoItem = () => {
             .then(res => {
                 res.json()
                 .then(data => {
+                    console.log(data)
                     setVideos(data.videos)
                 })
             })
@@ -94,7 +95,7 @@ const VideoItem = () => {
         if (platform === "spankbang") {
             const regex = /.+?(?=video)/
             const spankbangEmbedUrl = regex.exec(videoData)
-            return spankbangEmbedUrl[0] + "embed"
+            console.log(spankbangEmbedUrl[0] + "embed")
         }
     }
     

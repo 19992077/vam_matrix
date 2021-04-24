@@ -1,0 +1,4 @@
+- [ ] Fix spankbang search
+- [ ] Improve Youtube search
+- [ ] Improve UI
+- [ ] Being able to download videos or save them for later in a JSON format

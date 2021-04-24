@@ -37,7 +37,7 @@ def get_youtube_search():
     search_term = request.args.get("search_term")
     results = YoutubeSearch(search_term).to_json()
     data = json.loads(results)
-
+    print(data)
     return data
 
 # add a way to exclude tags
@@ -52,41 +52,42 @@ def get_pornhub_search():
 
 # add a way to get video time
 # add a way to auto get more pages
-@app.route("/search/spankbang", methods=["GET"])
-def get_spankbang_search():
-    search_term = request.args.get("search_term")
-    search = 'https://spankbang.com/s/' + search_term
-    raw_html = simple_get(search)
-    html = BeautifulSoup(raw_html, 'html.parser')
-
-    narrowed_html = html.find(class_='results_search')
-    narrowed_html = narrowed_html.find_all(class_='video-item')
-    for i, n_html in enumerate(narrowed_html):
-        narrowed_html[i] = 'https://www.spankbang.com' + n_html.a["href"]
-    results_str = json.dumps(narrowed_html)
-    results_list = json.loads(results_str)
-
-    return results_list
-
-# @app.route("/search", methods=["GET"])
-# def search():
+# @app.route("/search/spankbang", methods=["GET"])
+# def get_spankbang_search():
 #     search_term = request.args.get("search_term")
-#     exclude = request.args.get("exclude")
+#     search = 'https://spankbang.com/s/' + search_term
+#     raw_html = simple_get(search)
+#     html = BeautifulSoup(raw_html, 'html.parser')
 
-#     results = {
-#         "youtube": get_youtube_search(search_term),
-#         "pornhub": get_pornhub_search(search_term),
-#         "spankbang": get_spankbang_search(search_term)
-#     }
+#     narrowed_html = html.find(class_='results_search')
+#     narrowed_html = narrowed_html.find_all(class_='video-item')
+#     for i, n_html in enumerate(narrowed_html):
+#         narrowed_html[i] = 'https://www.spankbang.com' + n_html.a["href"]
+#     results_str = json.dumps(narrowed_html)
+#     results_list = json.loads(results_str)
 
-#     if exclude:
-#         excludeList = list(exclude.split(","))
-#         for platform in excludeList:
-#             if platform in excludeList:
-#                 results.pop(platform)
-#         return json.dumps(results)
-#     else:
-#         results_json = json.dumps(results, indent=2)
-#         return results_json
+#     return ''.join([str(i) for i in results_list])
+
+# not used
+@app.route("/search", methods=["GET"])
+def search():
+    search_term = request.args.get("search_term")
+    exclude = request.args.get("exclude")
+
+    results = {
+        "youtube": get_youtube_search(search_term),
+        "pornhub": get_pornhub_search(search_term),
+        "spankbang": get_spankbang_search(search_term)
+    }
+
+    if exclude:
+        excludeList = list(exclude.split(","))
+        for platform in excludeList:
+            if platform in excludeList:
+                results.pop(platform)
+        return json.dumps(results)
+    else:
+        results_json = json.dumps(results, indent=2)
+        return results_json
     
 app.run()
